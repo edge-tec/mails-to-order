@@ -3,7 +3,7 @@ ob_start();
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h3 class="text-white mb-0">Server Credentials — <?= htmlspecialchars($server['host_ip']) ?></h3>
+        <h3 class="text-white fw-bold mb-0">Server Credentials — <?= htmlspecialchars($server['host_ip']) ?></h3>
         <span class="badge badge-status badge-<?= strtolower($server['assignment_status']) ?> mt-1"><?= htmlspecialchars($server['assignment_status']) ?></span>
     </div>
     <a href="/servers" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back to Servers</a>
@@ -13,10 +13,10 @@ ob_start();
     <!-- Server Login Credentials Box -->
     <div class="col-md-7">
         <div class="card-custom p-4 border-indigo">
-            <h5 class="text-white mb-3"><i class="fa-solid fa-lock text-indigo me-2"></i>Secure Server Access Credentials</h5>
+            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-lock text-indigo me-2"></i>Secure Server Access Credentials</h5>
             
             <div class="mb-3">
-                <label class="text-muted small">Server IP / Host</label>
+                <label class="text-light-silver small fw-medium">Server IP / Host</label>
                 <div class="secret-box">
                     <span id="copy-ip"><?= htmlspecialchars($server['host_ip']) ?></span>
                     <button class="btn btn-dark btn-sm text-indigo" onclick="copyToClipboard('<?= htmlspecialchars($server['host_ip']) ?>', this)"><i class="fa-solid fa-copy"></i> Copy</button>
@@ -25,14 +25,14 @@ ob_start();
 
             <div class="row mb-3">
                 <div class="col-md-6 mb-3 mb-md-0">
-                    <label class="text-muted small">SSH Username</label>
+                    <label class="text-light-silver small fw-medium">SSH Username</label>
                     <div class="secret-box">
                         <span id="copy-user"><?= htmlspecialchars($server['username']) ?></span>
                         <button class="btn btn-dark btn-sm text-indigo" onclick="copyToClipboard('<?= htmlspecialchars($server['username']) ?>', this)"><i class="fa-solid fa-copy"></i> Copy</button>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="text-muted small">SSH Port</label>
+                    <label class="text-light-silver small fw-medium">SSH Port</label>
                     <div class="secret-box">
                         <span id="copy-port"><?= htmlspecialchars($server['ssh_port']) ?></span>
                         <button class="btn btn-dark btn-sm text-indigo" onclick="copyToClipboard('<?= htmlspecialchars($server['ssh_port']) ?>', this)"><i class="fa-solid fa-copy"></i> Copy</button>
@@ -41,7 +41,7 @@ ob_start();
             </div>
 
             <div class="mb-4">
-                <label class="text-muted small">Server Root Password</label>
+                <label class="text-light-silver small fw-medium">Server Root Password</label>
                 <div class="secret-box">
                     <span id="pwd-placeholder" data-revealed="false">••••••••••••</span>
                     <div>
@@ -51,7 +51,7 @@ ob_start();
                 </div>
             </div>
 
-            <div class="row border-top border-secondary pt-3 text-muted small">
+            <div class="row border-top border-secondary pt-3 text-light-silver small">
                 <div class="col-6">Server Type: <strong class="text-white"><?= htmlspecialchars($server['server_type']) ?></strong></div>
                 <div class="col-6 text-end">Location: <strong class="text-white"><?= htmlspecialchars($server['location']) ?></strong></div>
             </div>
@@ -61,7 +61,7 @@ ob_start();
     <!-- Usage & Limits Box -->
     <div class="col-md-5">
         <div class="card-custom p-4 h-100">
-            <h5 class="text-white mb-3"><i class="fa-solid fa-chart-line text-indigo me-2"></i>POP Usage Metrics</h5>
+            <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-chart-line text-indigo me-2"></i>POP Usage Metrics</h5>
 
             <div class="bg-dark p-3 rounded border border-secondary mb-3">
                 <div class="d-flex justify-content-between mb-1">
@@ -72,7 +72,7 @@ ob_start();
                     <?php $dPct = $popMetrics['daily_limit'] > 0 ? min(100, ($popMetrics['daily_used'] / $popMetrics['daily_limit']) * 100) : 0; ?>
                     <div class="progress-bar bg-indigo" style="width: <?= $dPct ?>%"></div>
                 </div>
-                <span class="text-muted small mt-2 d-block">Remaining Daily: <strong><?= number_format($popMetrics['daily_remaining']) ?></strong></span>
+                <span class="text-light-silver small mt-2 d-block">Remaining Daily: <strong class="text-white"><?= number_format($popMetrics['daily_remaining']) ?></strong></span>
             </div>
 
             <div class="bg-dark p-3 rounded border border-secondary mb-3">
@@ -84,12 +84,12 @@ ob_start();
                     <?php $mPct = $popMetrics['monthly_limit'] > 0 ? min(100, ($popMetrics['monthly_used'] / $popMetrics['monthly_limit']) * 100) : 0; ?>
                     <div class="progress-bar bg-accent" style="width: <?= $mPct ?>%"></div>
                 </div>
-                <span class="text-muted small mt-2 d-block">Remaining Monthly: <strong><?= number_format($popMetrics['monthly_remaining']) ?></strong></span>
+                <span class="text-light-silver small mt-2 d-block">Remaining Monthly: <strong class="text-white"><?= number_format($popMetrics['monthly_remaining']) ?></strong></span>
             </div>
 
-            <div class="border-top border-secondary pt-3 text-muted small">
-                <p class="mb-1"><i class="fa-solid fa-calendar text-indigo me-1"></i> Assigned: <?= date('Y-m-d', strtotime($server['assigned_at'])) ?></p>
-                <p class="mb-0"><i class="fa-solid fa-clock text-warning me-1"></i> Expiration: <?= date('Y-m-d', strtotime($server['expiration_date'])) ?></p>
+            <div class="border-top border-secondary pt-3 text-light-silver small">
+                <p class="mb-1 text-light-silver"><i class="fa-solid fa-calendar text-indigo me-1"></i> Assigned: <strong class="text-white"><?= date('Y-m-d', strtotime($server['assigned_at'])) ?></strong></p>
+                <p class="mb-0 text-light-silver"><i class="fa-solid fa-clock text-warning me-1"></i> Expiration: <strong class="text-warning"><?= date('Y-m-d', strtotime($server['expiration_date'])) ?></strong></p>
             </div>
         </div>
     </div>
