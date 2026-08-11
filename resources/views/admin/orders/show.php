@@ -155,5 +155,5 @@ function toggleServerMode(mode) {
 </script>
 <?php
 $content = ob_get_clean();
-require __DIR__ . '/../layouts/admin.php';
+require __DIR__ . '/../../layouts/admin.php';
 ?>
