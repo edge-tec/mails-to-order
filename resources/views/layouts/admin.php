@@ -28,6 +28,7 @@
                 <div class="p-3">
                     <div class="nav flex-column">
                         <a href="/admin" class="nav-link <?= $_SERVER['REQUEST_URI'] === '/admin' ? 'active' : '' ?>"><i class="fa-solid fa-chart-line me-2"></i> Overview</a>
+                        <a href="/admin/users" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/users') !== false ? 'active' : '' ?>"><i class="fa-solid fa-users me-2"></i> User Accounts</a>
                         <a href="/admin/orders" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/orders') !== false ? 'active' : '' ?>"><i class="fa-solid fa-cart-shopping me-2"></i> Orders Management</a>
                         <a href="/admin/servers" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/servers') !== false ? 'active' : '' ?>"><i class="fa-solid fa-server me-2"></i> Server Inventory</a>
                         <a href="/admin/packages" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/packages') !== false ? 'active' : '' ?>"><i class="fa-solid fa-box-open me-2"></i> Packages & Pricing</a>

@@ -9,6 +9,13 @@
     <link href="/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
+    <?php if (!empty($_SESSION['impersonator_admin'])): ?>
+        <div class="bg-warning text-dark py-2 px-4 text-center fw-bold d-flex justify-content-between align-items-center sticky-top z-3 border-bottom border-dark">
+            <span><i class="fa-solid fa-user-ninja me-2"></i>Impersonation Mode: Logged in as <u><?= htmlspecialchars(auth_user()['name'] ?? '') ?></u> (<?= htmlspecialchars(auth_user()['email'] ?? '') ?>)</span>
+            <a href="/admin/impersonate/stop" class="btn btn-dark btn-sm text-warning fw-bold"><i class="fa-solid fa-arrow-left me-1"></i> Switch Back to Admin Account</a>
+        </div>
+    <?php endif; ?>
+
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container-fluid px-4">
             <a class="navbar-brand text-white fw-bold" href="/dashboard">

@@ -13,6 +13,7 @@ use App\Controllers\Admin\AdminCustomPackageController;
 use App\Controllers\Admin\AdminEmailTemplateController;
 use App\Controllers\Admin\AdminSettingsController;
 use App\Controllers\Admin\AdminAuditLogController;
+use App\Controllers\Admin\AdminUserController;
 use App\Controllers\ApiController;
 
 return [
@@ -61,6 +62,12 @@ return [
     // Admin Area Routes
     'GET /admin' => [AdminDashboardController::class, 'index'],
     
+    // Admin Users & Impersonation
+    'GET /admin/users' => [AdminUserController::class, 'index'],
+    'POST /admin/users/{id}/impersonate' => [AdminUserController::class, 'impersonate'],
+    'GET /admin/impersonate/stop' => [AdminUserController::class, 'stopImpersonate'],
+    'POST /admin/impersonate/stop' => [AdminUserController::class, 'stopImpersonate'],
+
     // Admin Orders
     'GET /admin/orders' => [AdminOrderController::class, 'index'],
     'GET /admin/orders/{id}' => [AdminOrderController::class, 'show'],
