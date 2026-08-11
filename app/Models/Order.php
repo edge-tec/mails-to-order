@@ -12,15 +12,26 @@ class Order {
     }
 
     public static function ensureCustomColumns(): void {
+        static $checked = false;
+        if ($checked) return;
+        $checked = true;
+
         try {
-            Database::execute("ALTER TABLE orders ADD COLUMN `custom_server_url` VARCHAR(255) NULL");
-        } catch (\Exception $e) {}
-        try {
-            Database::execute("ALTER TABLE orders ADD COLUMN `custom_email_username` VARCHAR(150) NULL");
-        } catch (\Exception $e) {}
-        try {
-            Database::execute("ALTER TABLE orders ADD COLUMN `custom_server_password` VARCHAR(255) NULL");
-        } catch (\Exception $e) {}
+            $cols = Database::fetchAll("SHOW COLUMNS FROM orders");
+            $colNames = array_column($cols, 'Field');
+            
+            if (!in_array('custom_server_url', $colNames)) {
+                Database::execute("ALTER TABLE orders ADD COLUMN `custom_server_url` VARCHAR(255) NULL");
+            }
+            if (!in_array('custom_email_username', $colNames)) {
+                Database::execute("ALTER TABLE orders ADD COLUMN `custom_email_username` VARCHAR(150) NULL");
+            }
+            if (!in_array('custom_server_password', $colNames)) {
+                Database::execute("ALTER TABLE orders ADD COLUMN `custom_server_password` VARCHAR(255) NULL");
+            }
+        } catch (\Throwable $e) {
+            // ignore schema check errors
+        }
     }
 
     public static function create(array $data): int {

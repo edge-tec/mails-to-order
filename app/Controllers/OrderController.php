@@ -203,47 +203,58 @@ class OrderController {
         $customUser = trim($_POST['custom_email_username'] ?? '');
         $customPass = $_POST['custom_server_password'] ?? '';
 
-        // Create Order with custom server preferences
-        $orderId = Order::create([
-            'user_id' => $user['id'],
-            'package_id' => $draft['package_id'],
-            'package_name' => $draft['package_name'],
-            'daily_pop' => $draft['daily_pop'],
-            'monthly_pop' => $draft['monthly_pop'],
-            'price' => $draft['price'],
-            'status' => 'Under Review',
-            'customer_name' => $draft['customer_name'],
-            'customer_email' => $draft['customer_email'],
-            'customer_phone' => $draft['customer_phone'],
-            'customer_address' => $draft['customer_address'],
-            'custom_server_url' => $customUrl,
-            'custom_email_username' => $customUser,
-            'custom_server_password' => $customPass,
-            'notes' => 'Submitted via checkout'
-        ]);
+        try {
+            // Create Order with custom server preferences
+            $orderId = Order::create([
+                'user_id' => $user['id'],
+                'package_id' => $draft['package_id'],
+                'package_name' => $draft['package_name'],
+                'daily_pop' => $draft['daily_pop'],
+                'monthly_pop' => $draft['monthly_pop'],
+                'price' => $draft['price'],
+                'status' => 'Under Review',
+                'customer_name' => $draft['customer_name'],
+                'customer_email' => $draft['customer_email'],
+                'customer_phone' => $draft['customer_phone'],
+                'customer_address' => $draft['customer_address'],
+                'custom_server_url' => $customUrl,
+                'custom_email_username' => $customUser,
+                'custom_server_password' => $customPass,
+                'notes' => 'Submitted via checkout'
+            ]);
 
-        $order = Order::findById($orderId);
+            $order = Order::findById($orderId);
 
-        // Create Payment
-        Payment::create([
-            'order_id' => $orderId,
-            'payment_method_code' => $draft['payment']['method_code'],
-            'payment_method_name' => $draft['payment']['method_name'],
-            'transaction_id' => $draft['payment']['transaction_id'],
-            'amount' => $draft['payment']['amount'],
-            'screenshot_path' => $draft['payment']['screenshot_path'],
-            'payment_note' => $draft['payment']['note'],
-            'status' => 'pending'
-        ]);
+            // Create Payment
+            Payment::create([
+                'order_id' => $orderId,
+                'payment_method_code' => $draft['payment']['method_code'],
+                'payment_method_name' => $draft['payment']['method_name'],
+                'transaction_id' => $draft['payment']['transaction_id'],
+                'amount' => $draft['payment']['amount'],
+                'screenshot_path' => $draft['payment']['screenshot_path'],
+                'payment_note' => $draft['payment']['note'],
+                'status' => 'pending'
+            ]);
 
-        // Send Email Notification
-        EmailService::sendOrderSubmitted(User::findById($user['id']), $order);
+            // Send Email Notification safely
+            try {
+                EmailService::sendOrderSubmitted(User::findById($user['id']), $order);
+            } catch (\Throwable $te) {
+                error_log("Order notification email error: " . $te->getMessage());
+            }
 
-        unset($_SESSION['order_draft']);
+            unset($_SESSION['order_draft']);
 
-        view('order.success', [
-            'title' => 'Order Submitted Successfully',
-            'order' => $order
-        ]);
+            view('order.success', [
+                'title' => 'Order Submitted Successfully',
+                'order' => $order
+            ]);
+
+        } catch (Exception $e) {
+            error_log("Order confirmation error: " . $e->getMessage());
+            flash('error', "Order submission error: " . $e->getMessage());
+            redirect('/order/step3');
+        }
     }
 }
