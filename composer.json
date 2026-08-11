@@ -1,0 +1,30 @@
+{
+    "name": "edgetec/server-ordering-system",
+    "description": "Production-ready Server Ordering & Provisioning System",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.2",
+        "ext-pdo": "*",
+        "ext-openssl": "*",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "ext-mbstring": "*",
+        "phpmailer/phpmailer": "^6.9",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/Helpers/functions.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Edge-Tec Software",
+            "email": "support@edgetec.net"
+        }
+    ]
+}
