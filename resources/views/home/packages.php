@@ -3,7 +3,7 @@ ob_start();
 ?>
 <div class="text-center py-4">
     <h1 class="text-white fw-bold">Server Packages & POP Quotas</h1>
-    <p class="text-muted">Select an optimized package below to start your order process</p>
+    <p class="text-light-silver fs-5">Select an optimized package below to start your order process</p>
 </div>
 
 <div class="row g-4 my-3">
@@ -11,18 +11,18 @@ ob_start();
         <div class="col-md-4">
             <div class="pricing-card text-center h-100 d-flex flex-column justify-content-between">
                 <div>
-                    <h3 class="text-white mb-2"><?= htmlspecialchars($pkg['name']) ?></h3>
-                    <p class="text-muted small mb-4"><?= htmlspecialchars($pkg['description']) ?></p>
+                    <h3 class="text-white mb-2 fw-bold"><?= htmlspecialchars($pkg['name']) ?></h3>
+                    <p class="text-light-silver small mb-4"><?= htmlspecialchars($pkg['description']) ?></p>
                     
                     <div class="price mb-4">
                         <?php if ($pkg['type'] === 'custom'): ?>
-                            <span class="fs-4">Custom Quote</span>
+                            <span class="fs-4 text-white">Custom Quote</span>
                         <?php else: ?>
-                            $<?= number_format($pkg['price'], 2) ?><span class="fs-6 text-muted">/mo</span>
+                            $<span class="text-white"><?= number_format($pkg['price'], 2) ?></span><span class="fs-6 text-light-silver">/mo</span>
                         <?php endif; ?>
                     </div>
 
-                    <ul class="list-unstyled text-muted small mb-4 text-start">
+                    <ul class="list-unstyled text-light-silver small mb-4 text-start">
                         <?php if ($pkg['type'] === 'custom'): ?>
                             <li class="mb-2"><i class="fa-solid fa-sliders text-indigo me-2"></i>Custom Daily POP Capacity</li>
                             <li class="mb-2"><i class="fa-solid fa-sliders text-indigo me-2"></i>Custom Monthly POP Quota</li>
