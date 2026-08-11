@@ -11,11 +11,11 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container-fluid px-4">
-            <a class="navbar-brand" href="/dashboard">
+            <a class="navbar-brand text-white fw-bold" href="/dashboard">
                 <i class="fa-solid fa-server text-indigo me-2"></i><?= htmlspecialchars(config('app.name')) ?>
             </a>
             <div class="d-flex align-items-center gap-3 ms-auto">
-                <span class="text-muted small d-none d-md-inline"><i class="fa-solid fa-user me-1"></i><?= htmlspecialchars(auth_user()['name'] ?? '') ?></span>
+                <span class="text-light fw-medium small d-none d-md-inline"><i class="fa-solid fa-user me-1"></i><?= htmlspecialchars(auth_user()['name'] ?? '') ?></span>
                 <a href="/logout" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-right-from-bracket me-1"></i> Log Out</a>
             </div>
         </div>

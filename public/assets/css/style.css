@@ -12,21 +12,21 @@
     --text-muted: #cbd5e1;
     --border-color: #334155;
     --bs-secondary-color: #cbd5e1;
-    --bs-body-color: #f8fafc;
+    --bs-body-color: #ffffff;
 }
 
 body {
     background-color: var(--bg-dark);
-    color: #f8fafc !important;
+    color: #ffffff !important;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
     margin: 0;
     padding: 0;
 }
 
-/* Force All Paragraphs, Spans, Labels, and Small Text to be High-Contrast Light Silver/White */
-p, span, div, small, label, td, th, li {
-    color: #e2e8f0;
+/* Universal Maximum Visibility Text Overrides */
+p, span, li, td, th, label, small, div, h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
 }
 
 .text-muted,
@@ -35,6 +35,9 @@ p.text-muted,
 span.text-muted,
 div.text-muted,
 small.text-muted,
+label.text-muted,
+td.text-muted,
+th.text-muted,
 ul.text-muted li,
 .small,
 small {
@@ -47,7 +50,7 @@ small {
 
 .lead,
 p.lead {
-    color: #f8fafc !important;
+    color: #ffffff !important;
     font-size: 1.15rem;
     line-height: 1.6;
 }
@@ -78,11 +81,17 @@ p.lead {
     border: 1px solid var(--border-color);
     border-radius: 16px;
     transition: transform 0.2s, box-shadow 0.2s;
-    color: #e2e8f0 !important;
+    color: #ffffff !important;
 }
 .card-custom:hover {
     border-color: #475569;
     box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+}
+
+.card-custom span,
+.card-custom .text-uppercase,
+.card-custom p {
+    color: #cbd5e1 !important;
 }
 
 /* Pricing Card */
@@ -93,7 +102,7 @@ p.lead {
     padding: 35px 25px;
     position: relative;
     overflow: hidden;
-    color: #e2e8f0 !important;
+    color: #ffffff !important;
 }
 .pricing-card.featured {
     border-color: var(--primary);
@@ -112,10 +121,22 @@ p.lead {
     color: #cbd5e1 !important;
 }
 .pricing-card ul li {
-    color: #e2e8f0 !important;
+    color: #f1f5f9 !important;
 }
 .pricing-card ul li strong {
     color: #ffffff !important;
+}
+
+/* Tables */
+.table {
+    color: #ffffff !important;
+}
+.table td, .table th {
+    color: #f1f5f9 !important;
+    border-color: #334155;
+}
+.table .text-muted {
+    color: #cbd5e1 !important;
 }
 
 /* Status Badges */
