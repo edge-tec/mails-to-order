@@ -4,7 +4,7 @@ ob_start();
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h2 class="text-white fw-bold">Admin Dashboard Overview</h2>
-        <p class="text-muted small mb-0">System performance metrics, revenue summary, and pending actions</p>
+        <p class="text-white small mb-0">System performance metrics, revenue summary, and pending actions</p>
     </div>
 </div>
 
@@ -12,25 +12,25 @@ ob_start();
 <div class="row g-3 mb-4">
     <div class="col-md-3">
         <div class="card-custom p-3 border-start border-4 border-primary">
-            <span class="text-muted small text-uppercase fw-bold">Total Revenue</span>
+            <span class="text-white small text-uppercase fw-bold d-block mb-1">Total Revenue</span>
             <h3 class="text-white mb-0 mt-1">$<?= number_format($stats['total_revenue'], 2) ?></h3>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card-custom p-3 border-start border-4 border-warning">
-            <span class="text-muted small text-uppercase fw-bold">Orders Under Review</span>
+            <span class="text-white small text-uppercase fw-bold d-block mb-1">Orders Under Review</span>
             <h3 class="text-warning mb-0 mt-1"><?= $stats['under_review'] ?></h3>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card-custom p-3 border-start border-4 border-success">
-            <span class="text-muted small text-uppercase fw-bold">Active Provisioned Servers</span>
+            <span class="text-white small text-uppercase fw-bold d-block mb-1">Active Provisioned Servers</span>
             <h3 class="text-success mb-0 mt-1"><?= $stats['active_servers'] ?></h3>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card-custom p-3 border-start border-4 border-info">
-            <span class="text-muted small text-uppercase fw-bold">Registered Users</span>
+            <span class="text-white small text-uppercase fw-bold d-block mb-1">Registered Users</span>
             <h3 class="text-info mb-0 mt-1"><?= $stats['total_users'] ?></h3>
         </div>
     </div>
@@ -39,25 +39,25 @@ ob_start();
 <div class="row g-3 mb-4">
     <div class="col-md-3">
         <div class="card-custom p-3">
-            <span class="text-muted small text-uppercase fw-bold">Total Orders</span>
+            <span class="text-white small text-uppercase fw-bold d-block mb-1">Total Orders</span>
             <h4 class="text-white mb-0 mt-1"><?= $stats['total_orders'] ?></h4>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card-custom p-3">
-            <span class="text-muted small text-uppercase fw-bold">Pending Payment</span>
+            <span class="text-white small text-uppercase fw-bold d-block mb-1">Pending Payment</span>
             <h4 class="text-white mb-0 mt-1"><?= $stats['pending_orders'] ?></h4>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card-custom p-3">
-            <span class="text-muted small text-uppercase fw-bold">Approved Orders</span>
+            <span class="text-white small text-uppercase fw-bold d-block mb-1">Approved Orders</span>
             <h4 class="text-white mb-0 mt-1"><?= $stats['approved_orders'] ?></h4>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card-custom p-3">
-            <span class="text-muted small text-uppercase fw-bold">Suspended Servers</span>
+            <span class="text-white small text-uppercase fw-bold d-block mb-1">Suspended Servers</span>
             <h4 class="text-danger mb-0 mt-1"><?= $stats['suspended_servers'] ?></h4>
         </div>
     </div>
@@ -90,24 +90,24 @@ ob_start();
         <table class="table table-dark table-hover align-middle mb-0">
             <thead>
                 <tr>
-                    <th>Order #</th>
-                    <th>Customer Email</th>
-                    <th>Package</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th class="text-white">Order #</th>
+                    <th class="text-white">Customer Email</th>
+                    <th class="text-white">Package</th>
+                    <th class="text-white">Amount</th>
+                    <th class="text-white">Status</th>
+                    <th class="text-white">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($recentOrders)): ?>
-                    <tr><td colspan="6" class="text-center text-muted py-3">No orders found.</td></tr>
+                    <tr><td colspan="6" class="text-center text-white py-3">No orders found.</td></tr>
                 <?php else: ?>
                     <?php foreach ($recentOrders as $o): ?>
                         <tr>
                             <td class="font-monospace text-indigo fw-bold"><?= htmlspecialchars($o['order_number']) ?></td>
-                            <td><?= htmlspecialchars($o['customer_email']) ?></td>
-                            <td><?= htmlspecialchars($o['package_name']) ?></td>
-                            <td>$<?= number_format($o['price'], 2) ?></td>
+                            <td class="text-white"><?= htmlspecialchars($o['customer_email']) ?></td>
+                            <td class="text-white"><?= htmlspecialchars($o['package_name']) ?></td>
+                            <td class="text-white">$<?= number_format($o['price'], 2) ?></td>
                             <td><span class="badge badge-status badge-<?= strtolower(str_replace(' ', '', $o['status'])) ?>"><?= htmlspecialchars($o['status']) ?></span></td>
                             <td><a href="/admin/orders/<?= $o['id'] ?>" class="btn btn-outline-warning btn-sm"><i class="fa-solid fa-sliders"></i> Review</a></td>
                         </tr>
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 tension: 0.4
             }]
         },
-        options: { plugins: { legend: { labels: { color: '#94a3b8' } } }, scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } } }
+        options: { plugins: { legend: { labels: { color: '#ffffff' } } }, scales: { x: { ticks: { color: '#ffffff' } }, y: { ticks: { color: '#ffffff' } } } }
     });
 
     // Package Chart
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 backgroundColor: ['#6366f1', '#10b981', '#f59e0b']
             }]
         },
-        options: { plugins: { legend: { labels: { color: '#94a3b8' } } } }
+        options: { plugins: { legend: { labels: { color: '#ffffff' } } } }
     });
 });
 </script>
