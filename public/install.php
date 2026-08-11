@@ -17,6 +17,12 @@ $step = (int)($_GET['step'] ?? 1);
 $error = null;
 $success = null;
 
+// Redirect to Step 2 if user directly accesses Step 3+ without entering DB info
+if ($step > 2 && empty($_SESSION['install']['db'])) {
+    header('Location: install.php?step=2');
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
@@ -53,7 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'step3_migrate') {
         try {
-            $dbConfig = $_SESSION['install']['db'];
+            $dbConfig = $_SESSION['install']['db'] ?? [];
+            if (empty($dbConfig)) {
+                header('Location: install.php?step=2');
+                exit;
+            }
             InstallerService::runMigrationsAndSeeders($dbConfig);
             header('Location: install.php?step=4');
             exit;
@@ -101,22 +111,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $smtpPass = $_POST['smtp_pass'] ?? '';
         $smtpEnc = trim($_POST['smtp_enc'] ?? 'tls');
         $fromAddr = trim($_POST['mail_from_addr'] ?? 'support@example.com');
-        $fromName = trim($_POST['mail_from_name'] ?? $_SESSION['install']['site']['name']);
+        $fromName = trim($_POST['mail_from_name'] ?? $_SESSION['install']['site']['name'] ?? 'Server Operations');
 
-        $dbConfig = $_SESSION['install']['db'];
-        $admin = $_SESSION['install']['admin'];
-        $site = $_SESSION['install']['site'];
+        $dbConfig = $_SESSION['install']['db'] ?? [];
+        $admin = $_SESSION['install']['admin'] ?? [];
+        $site = $_SESSION['install']['site'] ?? [];
 
         try {
             // Write .env
             InstallerService::generateEnvFile([
-                'site_name' => $site['name'],
-                'site_url' => $site['url'],
-                'db_host' => $dbConfig['host'],
-                'db_port' => $dbConfig['port'],
-                'db_name' => $dbConfig['name'],
-                'db_user' => $dbConfig['user'],
-                'db_pass' => $dbConfig['pass'],
+                'site_name' => $site['name'] ?? 'Server Provisioning Portal',
+                'site_url' => $site['url'] ?? 'http://localhost:8000',
+                'db_host' => $dbConfig['host'] ?? '127.0.0.1',
+                'db_port' => $dbConfig['port'] ?? '3306',
+                'db_name' => $dbConfig['name'] ?? 'server_ordering_db',
+                'db_user' => $dbConfig['user'] ?? 'root',
+                'db_pass' => $dbConfig['pass'] ?? '',
                 'smtp_host' => $smtpHost,
                 'smtp_port' => $smtpPort,
                 'smtp_user' => $smtpUser,
@@ -130,12 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             DatabaseSeeder::run();
 
             // Create Administrator Account
-            $adminUser = Database::fetch("SELECT id FROM users WHERE email = ?", [$admin['email']]);
+            $adminUser = Database::fetch("SELECT id FROM users WHERE email = ?", [$admin['email'] ?? 'admin@example.com']);
             if (!$adminUser) {
                 $userId = Database::insert(
                     "INSERT INTO users (name, email, phone, address, password_hash, role, status, email_verified_at, created_at, updated_at)
                     VALUES (?, ?, ?, ?, ?, 'super_admin', 'active', NOW(), NOW(), NOW())",
-                    [$admin['name'], $admin['email'], '+1 800-555-0199', 'Headquarters', password_hash($admin['pass'], PASSWORD_BCRYPT)]
+                    [$admin['name'] ?? 'System Administrator', $admin['email'] ?? 'admin@example.com', '+1 800-555-0199', 'Headquarters', password_hash($admin['pass'] ?? 'Admin@123456', PASSWORD_BCRYPT)]
                 );
                 Database::insert("INSERT INTO admins (user_id, department, created_at) VALUES (?, 'Super Administration', NOW())", [$userId]);
             }

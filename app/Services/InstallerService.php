@@ -53,15 +53,27 @@ class InstallerService {
     }
 
     public static function testDatabase(array $config): bool {
-        $dsn = "mysql:host={$config['host']};port={$config['port']};charset=utf8mb4";
-        $pdo = new PDO($dsn, $config['username'], $config['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-        $pdo->exec("CREATE DATABASE IF NOT EXISTS `{$config['database']}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        $host = $config['host'] ?? '127.0.0.1';
+        $port = $config['port'] ?? '3306';
+        $user = $config['username'] ?? 'root';
+        $pass = $config['password'] ?? '';
+        $db   = $config['database'] ?? 'server_ordering_db';
+
+        $dsn = "mysql:host={$host};port={$port};charset=utf8mb4";
+        $pdo = new PDO($dsn, $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+        $pdo->exec("CREATE DATABASE IF NOT EXISTS `{$db}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
         return true;
     }
 
     public static function runMigrationsAndSeeders(array $dbConfig): void {
-        $dsn = "mysql:host={$dbConfig['host']};port={$dbConfig['port']};dbname={$dbConfig['database']};charset=utf8mb4";
-        $pdo = new PDO($dsn, $dbConfig['username'], $dbConfig['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+        $host = $dbConfig['host'] ?? '127.0.0.1';
+        $port = $dbConfig['port'] ?? '3306';
+        $user = $dbConfig['user'] ?? $dbConfig['username'] ?? 'root';
+        $pass = $dbConfig['pass'] ?? $dbConfig['password'] ?? '';
+        $db   = $dbConfig['name'] ?? $dbConfig['database'] ?? 'server_ordering_db';
+
+        $dsn = "mysql:host={$host};port={$port};dbname={$db};charset=utf8mb4";
+        $pdo = new PDO($dsn, $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
         // Run migration SQL file
         $sqlFile = __DIR__ . '/../../database/migrations/001_create_tables.sql';
