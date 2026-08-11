@@ -199,7 +199,11 @@ class OrderController {
         $draft = $_SESSION['order_draft'];
         $user = auth_user();
 
-        // Create Order
+        $customUrl = trim($_POST['custom_server_url'] ?? '');
+        $customUser = trim($_POST['custom_email_username'] ?? '');
+        $customPass = $_POST['custom_server_password'] ?? '';
+
+        // Create Order with custom server preferences
         $orderId = Order::create([
             'user_id' => $user['id'],
             'package_id' => $draft['package_id'],
@@ -212,6 +216,9 @@ class OrderController {
             'customer_email' => $draft['customer_email'],
             'customer_phone' => $draft['customer_phone'],
             'customer_address' => $draft['customer_address'],
+            'custom_server_url' => $customUrl,
+            'custom_email_username' => $customUser,
+            'custom_server_password' => $customPass,
             'notes' => 'Submitted via checkout'
         ]);
 

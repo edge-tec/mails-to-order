@@ -11,11 +11,24 @@ class Order {
         return $prefix . $seq;
     }
 
+    public static function ensureCustomColumns(): void {
+        try {
+            Database::execute("ALTER TABLE orders ADD COLUMN `custom_server_url` VARCHAR(255) NULL");
+        } catch (\Exception $e) {}
+        try {
+            Database::execute("ALTER TABLE orders ADD COLUMN `custom_email_username` VARCHAR(150) NULL");
+        } catch (\Exception $e) {}
+        try {
+            Database::execute("ALTER TABLE orders ADD COLUMN `custom_server_password` VARCHAR(255) NULL");
+        } catch (\Exception $e) {}
+    }
+
     public static function create(array $data): int {
+        self::ensureCustomColumns();
         $orderNumber = self::generateOrderNumber();
         return (int) Database::insert(
-            "INSERT INTO orders (order_number, user_id, package_id, package_name, daily_pop, monthly_pop, price, status, customer_name, customer_email, customer_phone, customer_address, notes, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+            "INSERT INTO orders (order_number, user_id, package_id, package_name, daily_pop, monthly_pop, price, status, customer_name, customer_email, customer_phone, customer_address, custom_server_url, custom_email_username, custom_server_password, notes, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
             [
                 $orderNumber,
                 (int)$data['user_id'],
@@ -29,24 +42,31 @@ class Order {
                 $data['customer_email'],
                 $data['customer_phone'],
                 $data['customer_address'],
+                $data['custom_server_url'] ?? null,
+                $data['custom_email_username'] ?? null,
+                $data['custom_server_password'] ?? null,
                 $data['notes'] ?? ''
             ]
         );
     }
 
     public static function findById(int $id): ?array {
+        self::ensureCustomColumns();
         return Database::fetch("SELECT o.*, u.email as user_email FROM orders o JOIN users u ON o.user_id = u.id WHERE o.id = ?", [$id]);
     }
 
     public static function findByOrderNumber(string $orderNumber): ?array {
+        self::ensureCustomColumns();
         return Database::fetch("SELECT * FROM orders WHERE order_number = ?", [$orderNumber]);
     }
 
     public static function getByUserId(int $userId): array {
+        self::ensureCustomColumns();
         return Database::fetchAll("SELECT * FROM orders WHERE user_id = ? ORDER BY id DESC", [$userId]);
     }
 
     public static function getAll(): array {
+        self::ensureCustomColumns();
         return Database::fetchAll(
             "SELECT o.*, p.transaction_id, p.payment_method_name, p.screenshot_path, p.amount as paid_amount
              FROM orders o

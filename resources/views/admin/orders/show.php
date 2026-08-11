@@ -11,6 +11,24 @@ ob_start();
 
 <div class="row g-4">
     <div class="col-md-7">
+        <!-- Customer Requested Custom Specifications Box -->
+        <?php if (!empty($order['custom_server_url']) || !empty($order['custom_email_username']) || !empty($order['custom_server_password'])): ?>
+            <div class="card-custom p-4 mb-4 border-info">
+                <h5 class="text-info mb-3"><i class="fa-solid fa-sliders me-2"></i>Customer Requested Server Specifications</h5>
+                <table class="table table-dark border-secondary mb-0">
+                    <?php if (!empty($order['custom_server_url'])): ?>
+                        <tr><th>Requested Server URL / Host</th><td><span class="text-info font-monospace fw-bold"><?= htmlspecialchars($order['custom_server_url']) ?></span></td></tr>
+                    <?php endif; ?>
+                    <?php if (!empty($order['custom_email_username'])): ?>
+                        <tr><th>Requested Username / Email</th><td><span class="text-white font-monospace fw-bold"><?= htmlspecialchars($order['custom_email_username']) ?></span></td></tr>
+                    <?php endif; ?>
+                    <?php if (!empty($order['custom_server_password'])): ?>
+                        <tr><th>Requested Password</th><td><span class="text-warning font-monospace fw-bold"><?= htmlspecialchars($order['custom_server_password']) ?></span></td></tr>
+                    <?php endif; ?>
+                </table>
+            </div>
+        <?php endif; ?>
+
         <!-- Order & Payment Review Card -->
         <div class="card-custom p-4 mb-4">
             <h5 class="text-indigo mb-3"><i class="fa-solid fa-credit-card me-2"></i>Payment Verification & Details</h5>
@@ -49,12 +67,12 @@ ob_start();
                         <label class="form-label text-white">Select Server Assignment Mode</label>
                         <select name="server_mode" id="server_mode" class="form-select bg-dark text-white border-secondary" onchange="toggleServerMode(this.value)">
                             <option value="existing" selected>Assign Available Server from Inventory Pool</option>
-                            <option value="new">Provision & Add New Server Node</option>
+                            <option value="new" <?= (!empty($order['custom_server_url']) || !empty($order['custom_server_password'])) ? 'selected' : '' ?>>Provision & Add New Server Node</option>
                         </select>
                     </div>
 
                     <!-- Existing Server Selector -->
-                    <div id="existing_server_box" class="mb-3">
+                    <div id="existing_server_box" class="mb-3 <?= (!empty($order['custom_server_url']) || !empty($order['custom_server_password'])) ? 'd-none' : '' ?>">
                         <label class="form-label text-white">Select Server from Inventory Pool</label>
                         <select name="server_id" class="form-select bg-dark text-white border-secondary">
                             <?php if (empty($availableServers)): ?>
@@ -68,12 +86,12 @@ ob_start();
                     </div>
 
                     <!-- New Server Provisioning Fields -->
-                    <div id="new_server_box" class="d-none border border-secondary p-3 rounded mb-3 bg-dark">
+                    <div id="new_server_box" class="border border-secondary p-3 rounded mb-3 bg-dark <?= (!empty($order['custom_server_url']) || !empty($order['custom_server_password'])) ? '' : 'd-none' ?>">
                         <h6 class="text-indigo mb-3 font-weight-bold">New Server Node Credentials</h6>
                         <div class="row mb-2">
                             <div class="col-md-8 mb-2">
-                                <label class="form-label text-white small">Server Host/IP</label>
-                                <input type="text" name="new_host_ip" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="192.168.1.100">
+                                <label class="form-label text-white small">Server Host/IP or URL</label>
+                                <input type="text" name="new_host_ip" class="form-control form-control-sm bg-dark text-white border-secondary" value="<?= htmlspecialchars($order['custom_server_url'] ?? '') ?>" placeholder="192.168.1.100 or srv1.domain.com">
                             </div>
                             <div class="col-md-4 mb-2">
                                 <label class="form-label text-white small">SSH Port</label>
@@ -82,12 +100,12 @@ ob_start();
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-6 mb-2">
-                                <label class="form-label text-white small">Username</label>
-                                <input type="text" name="new_username" class="form-control form-control-sm bg-dark text-white border-secondary" value="root">
+                                <label class="form-label text-white small">Username / Email</label>
+                                <input type="text" name="new_username" class="form-control form-control-sm bg-dark text-white border-secondary" value="<?= htmlspecialchars($order['custom_email_username'] ?? 'root') ?>">
                             </div>
                             <div class="col-md-6 mb-2">
                                 <label class="form-label text-white small">Password</label>
-                                <input type="password" name="new_password" class="form-control form-control-sm bg-dark text-white border-secondary">
+                                <input type="text" name="new_password" class="form-control form-control-sm bg-dark text-white border-secondary" value="<?= htmlspecialchars($order['custom_server_password'] ?? '') ?>">
                             </div>
                         </div>
                         <div class="mb-2">
@@ -98,7 +116,7 @@ ob_start();
 
                     <div class="mb-4">
                         <label class="form-label text-white">Admin Notes / Activation Remarks</label>
-                        <textarea name="admin_notes" class="form-control bg-dark text-white border-secondary" rows="2" placeholder="e.g. Payment verified via bKash. Server provisioned on Node-04."></textarea>
+                        <textarea name="admin_notes" class="form-control bg-dark text-white border-secondary" rows="2" placeholder="e.g. Payment verified. Server provisioned and email sent with login credentials."></textarea>
                     </div>
 
                     <div class="d-flex gap-2">
