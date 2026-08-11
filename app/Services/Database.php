@@ -8,6 +8,31 @@ use Exception;
 class Database {
     private static ?PDO $instance = null;
 
+    public static function setInstance(PDO $pdo): void {
+        self::$instance = $pdo;
+    }
+
+    public static function init(array $config): PDO {
+        $host = $config['host'] ?? '127.0.0.1';
+        $port = $config['port'] ?? '3306';
+        $db   = $config['name'] ?? $config['database'] ?? 'server_ordering_db';
+        $user = $config['user'] ?? $config['username'] ?? 'root';
+        $pass = $config['pass'] ?? $config['password'] ?? '';
+
+        $dsn = "mysql:host={$host};port={$port};dbname={$db};charset=utf8mb4";
+        self::$instance = new PDO(
+            $dsn,
+            $user,
+            $pass,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ]
+        );
+        return self::$instance;
+    }
+
     public static function getInstance(): PDO {
         if (self::$instance === null) {
             $config = config('database');
@@ -21,7 +46,6 @@ class Database {
                     $config['options']
                 );
             } catch (Exception $e) {
-                // Return clear error without exposing credentials
                 throw new Exception("Database Connection Error: " . $e->getMessage());
             }
         }

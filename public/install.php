@@ -139,6 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'mail_from_name' => $fromName,
             ]);
 
+            // Initialize Database singleton with session DB credentials
+            Database::init($dbConfig);
+
             // Run Seeder
             DatabaseSeeder::run();
 
