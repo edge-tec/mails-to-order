@@ -20,6 +20,9 @@ class Order {
             $cols = Database::fetchAll("SHOW COLUMNS FROM orders");
             $colNames = array_column($cols, 'Field');
             
+            if (!in_array('admin_notes', $colNames)) {
+                Database::execute("ALTER TABLE orders ADD COLUMN `admin_notes` TEXT NULL");
+            }
             if (!in_array('custom_server_url', $colNames)) {
                 Database::execute("ALTER TABLE orders ADD COLUMN `custom_server_url` VARCHAR(255) NULL");
             }
@@ -38,7 +41,7 @@ class Order {
         self::ensureCustomColumns();
         $orderNumber = self::generateOrderNumber();
         return (int) Database::insert(
-            "INSERT INTO orders (order_number, user_id, package_id, package_name, daily_pop, monthly_pop, price, status, customer_name, customer_email, customer_phone, customer_address, custom_server_url, custom_email_username, custom_server_password, notes, created_at, updated_at)
+            "INSERT INTO orders (order_number, user_id, package_id, package_name, daily_pop, monthly_pop, price, status, customer_name, customer_email, customer_phone, customer_address, custom_server_url, custom_email_username, custom_server_password, admin_notes, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
             [
                 $orderNumber,
@@ -56,7 +59,7 @@ class Order {
                 $data['custom_server_url'] ?? null,
                 $data['custom_email_username'] ?? null,
                 $data['custom_server_password'] ?? null,
-                $data['notes'] ?? ''
+                $data['admin_notes'] ?? $data['notes'] ?? ''
             ]
         );
     }
