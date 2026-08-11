@@ -15,7 +15,7 @@ class AdminUserController {
         $users = Database::fetchAll(
             "SELECT u.*, 
                 (SELECT COUNT(*) FROM orders o WHERE o.user_id = u.id) as order_count,
-                (SELECT COUNT(*) FROM user_servers us WHERE us.user_id = u.id) as server_count
+                (SELECT COUNT(*) FROM server_assignments sa WHERE sa.user_id = u.id) as server_count
              FROM users u 
              ORDER BY u.id DESC"
         );
@@ -38,7 +38,7 @@ class AdminUserController {
             redirect('/admin/users');
         }
 
-        // Store current admin ID in session
+        // Store current admin session in impersonator_admin
         $_SESSION['impersonator_admin'] = $adminUser;
         
         // Log in as target user
