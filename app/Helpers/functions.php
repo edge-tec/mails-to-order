@@ -56,7 +56,13 @@ if (!function_exists('config')) {
 
 if (!function_exists('url')) {
     function url($path = '') {
-        $baseUrl = rtrim(config('app.url', 'http://localhost:8000'), '/');
+        $appUrl = config('app.url');
+        if (empty($appUrl) || strpos($appUrl, 'localhost') !== false || strpos($appUrl, '127.0.0.1') !== false) {
+            $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https' ? 'https' : 'http';
+            $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+            $appUrl = "{$scheme}://{$host}";
+        }
+        $baseUrl = rtrim($appUrl, '/');
         $cleanPath = '/' . ltrim($path, '/');
         return $baseUrl . ($cleanPath === '/' ? '' : $cleanPath);
     }
@@ -113,8 +119,11 @@ if (!function_exists('verify_csrf')) {
 
 if (!function_exists('redirect')) {
     function redirect($path) {
-        $target = (strpos($path, 'http://') === 0 || strpos($path, 'https://') === 0) ? $path : url($path);
-        header('Location: ' . $target);
+        if (strpos($path, 'http://') === 0 || strpos($path, 'https://') === 0) {
+            header('Location: ' . $path);
+        } else {
+            header('Location: ' . url($path));
+        }
         exit;
     }
 }
